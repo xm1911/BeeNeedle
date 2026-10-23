@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "ビーニードルMOD",
+  "version": "0.2045",
+  "description": "まもなく登場",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "webNavigation",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://tsumanne.net/*",
+    "https://c3.ftbucket.info/*",
+    "https://may3.ftbucket.info/*",
+    "https://may2.ftbucket.info/*",
+    "https://futafuta.site/*",
+    "https://kako.futakuro.com/*",
+    "https://img.2chan.net/*",
+    "https://may.2chan.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+      "matches": [
+        "https://tsumanne.net/*",
+        "https://c3.ftbucket.info/*",
+        "https://may3.ftbucket.info/*",
+        "https://may2.ftbucket.info/*",
+        "https://futafuta.site/*",
+        "https://kako.futakuro.com/*",
+        "https://img.2chan.net/*",
+        "https://may.2chan.net/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+}

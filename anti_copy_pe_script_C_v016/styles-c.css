@@ -1,0 +1,95 @@
+/* ハイライト対象の要素の基本設定 */
+.bns-highlight-base {
+  position: relative;
+  padding-left: var(--quote-offset, 0);
+  box-sizing: border-box;
+}
+
+/* --- インジケーター（縦線）の共通スタイル --- */
+.bns-highlight-base.C-suspicious::before,
+.bns-highlight-base.C-external::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--quote-offset, 0em) * -0.5 - 12px);
+}
+
+/* 不審文字ハイライト (Suspicious) */
+.bns-highlight-base.C-suspicious::before {
+  width: 4px; /* 太さ */
+  background-color: rgba(255, 0, 0, 0.8) !important; /* テキストの左に赤色の縦線 */
+}
+.bns-highlight-base.C-suspicious {
+  background-color: rgba(255, 220, 0, 0.6) !important; /* 黄色の背景色 */
+}
+
+/* 外部重複ハイライト (External) */
+.bns-highlight-base.C-external::before {
+  width: 12px;
+  background-color: #7cfc00 !important; /* テキストの左に黄緑色の縦線 */
+}
+
+/* 内部重複ハイライト (Internal) - 重複レス用 */
+.bns-highlight-base.C-internal {
+  text-decoration: none !important;
+  /* repeating-linear-gradient を使って点線を生成 */
+  background-image: repeating-linear-gradient(to right, 
+    red 0,          /* 赤色 */
+    red 1px,        /* 点の長さ */
+    transparent 2px,  /* 点の終わりから空白の始まり */
+    transparent 6px   /* 空白の終わり (次の点の始まり) */
+  ) !important;
+  background-repeat: repeat-x !important;
+  /* 下線の位置を調整 */
+  background-position: var(--quote-offset, 0) 1.3em !important;
+  /* 下線の太さを調整 */
+  background-size: calc(100% - var(--quote-offset, 0)) 2px !important;
+}
+
+/* ★追加: 内部重複ハイライト (Origin) - オリジンレス用 */
+.bns-highlight-base.C-internal-origin {
+  text-decoration: none !important;
+  /* repeating-linear-gradient を使って青色の点線を生成 */
+  background-image: repeating-linear-gradient(to right, 
+    #00a0ff 0,          /* 青色 */
+    #00a0ff 1px,        /* 点の長さ */
+    transparent 2px,  /* 点の終わりから空白の始まり */
+    transparent 6px   /* 空白の終わり (次の点の始まり) */
+  ) !important;
+  background-repeat: repeat-x !important;
+  /* 下線の位置を調整 */
+  background-position: var(--quote-offset, 0) 1.3em !important;
+  /* 下線の太さを調整 */
+  background-size: calc(100% - var(--quote-offset, 0)) 2px !important;
+}
+
+
+/* --- 組み合わせの調整 --- */
+
+/* 不審(Suspicious) かつ 外部重複(External) の場合 */
+.bns-highlight-base.C-suspicious.C-external::before {
+  width: 6px;
+  background-color: #00ffff !important; /* テキストの左に水色の縦線 */
+}
+
+/* --- ★追加: 見えない不審文字ハイライト (Invisible Suspicious) --- */
+/* C-suspiciousのスタイルを継承しつつ、追加の記号を表示 */
+.bns-highlight-base.C-invisible-suspicious {
+  /* このクラス自体に特別なスタイルは不要。疑似要素で表現する */
+}
+
+/* 記号を表示するための::after疑似要素 */
+.bns-highlight-base.C-invisible-suspicious::after {
+  content: '👁️'; /* 目の絵文字 (Unicode) */
+  position: absolute;
+  top: 50%;
+  /* 赤いバーの左側に配置するための計算 */
+  /* left: calc(var(--quote-offset, 0em) * -0.5 - 12px (バーの左端) - 16px (記号の幅)); */
+  left: calc(var(--quote-offset, 0em) * -0.5 - 28px); /* 上記の計算を簡略化 */
+  transform: translateY(-50%);
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.8;
+  pointer-events: none; /* 記号がクリックやテキスト選択の邪魔にならないように */
+}

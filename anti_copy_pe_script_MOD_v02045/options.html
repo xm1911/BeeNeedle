@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>オプション設定</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="options-body">
+  <h1>オプション設定</h1>
+
+  <!-- 1. 基本設定 (デフォルトで開く) -->
+  <details open class="setting-group">
+    <summary><h2>基本設定</h2></summary>
+    <div>
+      <label for="enableReferenceExtraction">参照テキスト取得:</label>
+      <input type="checkbox" id="enableReferenceExtraction">
+      <p class="description">ログサイト訪問時にテキストを取り込むか否かの設定です。</p>
+    </div>
+
+    <div>
+      <label for="suspicionThreshold">判定スコア閾値:</label>
+      <input type="number" id="suspicionThreshold" min="0" max="200" value="80">
+      <p class="description">このスコアを超えたレスポンスを「疑わしい」として表示します。(0-200)　<br>行単位の編集距離では最大195点で、全文編集距離で検出された場合は最大200点になります。</p>
+    </div>
+  </details>
+  <hr>
+
+  <!-- 2. 参照テキストとの比較 (デフォルトで閉じる) -->
+  <details class="setting-group">
+    <summary><h2>参照テキストとの比較</h2></summary>
+    
+    <div>
+      <label for="enableReferenceComparison">有効/無効:</label>
+      <input type="checkbox" id="enableReferenceComparison">
+      <p class="description">蓄積された参照テキストデータベースとの比較を行うか否かの設定です。</p>
+    </div>
+
+    <h3>漢字フィルタリング</h3>
+    <div>
+      <label for="enableKanjiFiltering">漢字フィルタリングを有効にする:</label>
+      <input type="checkbox" id="enableKanjiFiltering">
+      <p class="description">N-gramの判定時に使用します。漢字の一致度を考慮して、偽陽性と計算負荷の両方を軽減します。</p>
+    </div>
+    <div>
+      <label for="minCommonKanji">最低共通漢字数:</label>
+      <input type="number" id="minCommonKanji" min="0" value="2">
+      <p class="description">共通の漢字がN個未満の文は、比較対象から除外します。値を大きくすると判定速度は上がりますが、検出漏れが増える可能性があります。</p>
+    </div>
+    <div>
+      <label for="kanjiScoreWeight">漢字の一致度の重視レベル:</label>
+      <select id="kanjiScoreWeight">
+          <option value="none">補正無し</option>
+          <option value="low">低い</option>
+          <option value="medium">標準</option>
+          <option value="high">高い</option>
+      </select>
+      <p class="description">N-gramの一致よりも、文章内容の類似（漢字の一致）をどれだけ重視してスパムを検出するかを設定します。<br>補正無しの場合は単純な足切りフィルタになります。</p>
+    </div>
+    <hr style="border-style: dashed;">
+
+
+    <h3>N-gram / 編集距離</h3>
+
+
+    <div>
+      <label for="trigramChainCount">Trigram連続一致数:</label>
+      <input type="number" id="trigramChainCount" min="1" value="10">
+      <p class="description">ここで設定した一致数がスコア100の基準になります。<br>この閾値以上の連続一致が認められた場合は一致が一つ増えるごとに5点加算されていきます。</p>
+    </div>
+
+    <div>
+      <label for="editDistance">編集距離閾値:</label>
+      <input type="number" id="editDistance" min="0" value="2">
+    </div>
+    <div>
+      <label for="enableFullEditDistance">全文編集距離比較:</label>
+      <input type="checkbox" id="enableFullEditDistance">
+      <p class="description">2以下が推奨です。<br>編集距離0で検知された時、最大の200点になり、そこから1増えるごとに点数が2点下がっていきます。</p>
+    </div>
+    <div>
+      <label for="enableLineBasedEditDistance">改行区切り編集距離:</label>
+      <input type="checkbox" id="enableLineBasedEditDistance">
+      <p class="description">閾値は全文ベースと共通です。こちらは最大が195点です。</p>
+    </div>
+
+    <h3>比較処理の有効/無効 (N-gram)</h3>
+
+    <div>
+      <label for="trigramEnabled">Trigram比較:</label>
+      <input type="checkbox" id="trigramEnabled">
+    </div>
+    
+    <!-- [追加] Jaccard Hybrid (参照) -->
+    <div>
+      <label for="enableJaccardHybrid">Jaccard Hybrid比較:</label>
+      <input type="checkbox" id="enableJaccardHybrid">
+      <p class="description">語順入れ替えタイプの検出に向いています。<br>6文字以下のテキストは比較されません。<br>最大150点（+ブースト）。中身のパラメータは固定です。漢字フィルタも適用されません。</p>
+    </div>
+    <!-- ------------------------------------ -->
+
+  </details>
+  <hr>
+
+  <!-- 3. キーワード検索セクション (既存のdetailsを維持しつつ、クラスを追加) -->
+  <details class="setting-group">
+    <summary><h2>キーワード検索 (AND/OR/正規表現)</h2></summary>
+    <div>
+      <label for="enableKeywordSearch">有効/無効:</label>
+      <input type="checkbox" id="enableKeywordSearch">
+    </div>
+    <div>
+      <label for="andKeywords">AND検索 (改行区切り):</label>
+      <textarea id="andKeywords" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="orKeywords">OR検索 (改行区切り):</label>
+      <textarea id="orKeywords" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="regexKeywords">正規表現 (改行区切り):</label>
+      <textarea id="regexKeywords" rows="3"></textarea>
+    </div>
+  </details>
+  <hr>
+  
+  <!-- 4. 除外設定セクション (既存のdetailsを維持しつつ、クラスを追加) -->
+  <details class="setting-group">
+    <summary><h2>除外設定 (正規表現)</h2></summary>
+    <div>
+      <label for="excludeTargetKeywords">ターゲット除外 (正規表現, 改行区切り):</label>
+      <textarea id="excludeTargetKeywords" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="excludeReferenceKeywords">参照テキスト除外 (正規表現, 改行区切り):</label>
+      <textarea id="excludeReferenceKeywords" rows="3"></textarea>
+      <p class="description">目的のページにアクセスする前に設定してください。</p>
+    </div>
+  </details>
+  <hr>
+
+  <!-- 5. 除去キーワード設定 (正規表現) (アコーディオン化) -->
+  <details class="setting-group">
+    <summary><h2>除去キーワード設定 (正規表現)</h2></summary>
+    <div>
+      <label for="removeKeywords">除去キーワード (正規表現, 改行区切り):</label>
+      <textarea id="removeKeywords" rows="3"></textarea>
+      <p class="description">比較プロセスの直前に、ターゲットと参照テキストの両方からここで指定したワード部分を削除します。<br>通常の単純文字列も使えますが、無効な正規表現と解釈された場合は無視されます（URL等）。メタ文字に注意してください。内部のフラグはgmです。<br>URLの行を除去したい時はこれを記入してください→「^https?://\S+$」<br>また、行が別であれば混成でも動作します。<br>テキストエリアの右下をドラッグすると大きくできます。<br>上から順に除去されていきます。なので長い定型文は上に配置することをお勧めします。</p>
+    </div>
+  </details>
+  <hr>
+
+  <!-- 6. ターゲット間比較 (アコーディオン化) -->
+  <details class="setting-group">
+    <summary><h2>ターゲット間比較</h2></summary>
+    <div>
+      <label for="enableTargetComparison">有効/無効:</label>
+      <input type="checkbox" id="enableTargetComparison">
+    </div>
+    
+
+    <h3>漢字フィルタリング (ターゲット間)</h3>
+    <div>
+      <label for="enableTargetKanjiFiltering">漢字フィルタリングを有効にする:</label>
+      <input type="checkbox" id="enableTargetKanjiFiltering">
+      <p class="description">N-gramの判定時に使用します。</p>
+    </div>
+    <div>
+      <label for="targetMinCommonKanji">最低共通漢字数:</label>
+      <input type="number" id="targetMinCommonKanji" min="0" value="2">
+      <p class="description">この数未満しか共通の漢字がないターゲット同士は、比較対象から除外されます。</p>
+    </div>
+    <div>
+      <label for="targetKanjiScoreWeight">漢字の一致度の重視レベル:</label>
+      <select id="targetKanjiScoreWeight">
+          <option value="none">補正無し</option>
+          <option value="low">低い</option>
+          <option value="medium">標準</option>
+          <option value="high">高い</option>
+      </select>
+      <p class="description">ターゲット同士の比較で、N-gramの一致よりも、文章内容の類似（漢字の一致）をどれだけ重視してスパムを検出するかを設定します。<br>補正無しの場合は単純な足切りフィルタになります。</p>
+    </div>
+    <hr style="border-style: dashed;">
+
+
+    <h3>N-gram / 編集距離 (ターゲット間)</h3>
+    <div>
+      <label for="targetTrigramChainCount">Trigram連続一致数:</label>
+      <input type="number" id="targetTrigramChainCount" min="1" value="10">
+      <p class="description">ここで設定した一致数がスコア100の基準になります。<br>この閾値以上の連続一致が認められた場合は一致が一つ増えるごとに5点加算されていきます。</p>
+    </div>
+
+
+    <div>
+      <label for="targetEditDistance">編集距離閾値:</label>
+      <input type="number" id="targetEditDistance" min="0" value="2">
+    </div>
+    <div>
+      <label for="enableTargetFullEditDistance">全文編集距離比較:</label>
+      <input type="checkbox" id="enableTargetFullEditDistance">
+    </div>
+    <div>
+      <label for="enableTargetLineComparison">改行区切り編集距離:</label>
+      <input type="checkbox" id="enableTargetLineComparison">
+    </div>
+
+    <h3>比較処理の有効/無効 (ターゲット間)</h3> 
+
+      <div>
+          <label>
+              <input type="checkbox" id="targetTrigramEnabled"> Trigram比較
+          </label>
+      </div>
+      
+      <!-- [追加] Jaccard Hybrid (ターゲット間) -->
+      <div>
+          <label>
+              <input type="checkbox" id="enableTargetJaccardHybrid"> Jaccard Hybrid比較
+          </label>
+          <p class="description">語順入れ替えタイプの検出に向いています。<br>6文字以下のテキストは比較されません。<br>最大150点（+ブースト）。中身のパラメータは固定です。漢字フィルタも適用されません。</p>
+      </div>
+      <!-- -------------------------------------------- -->
+
+  </details>
+  <hr>
+  
+  <!-- 7. 保存/データ操作 (アコーディオン化せず、常に表示) -->
+  <h2>データ操作と保存</h2>
+  <button id="saveButton">保存/適用</button>
+  <p id="statusMessage"></p>
+  <hr>
+  
+
+  <button id="deleteLatestButton">最新500件を削除</button>
+  <button id="clearMemoryButton">ログを全クリア</button>
+  
+  <p class="description">拡張機能が持っている参照テキストを操作します。</p>
+  <p id="clearMemoryMessage"></p>
+  <script src="options.js"></script>
+</body>
+</html>

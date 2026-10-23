@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "ビーニードルシステムC",
+  "version": "0.16",
+  "description": "タブ間とタブ内でリアルタイムにレスを突合します",
+  "permissions": [
+    "tabs",
+    "storage" 
+  ],
+  "host_permissions": [
+    "https://img.2chan.net/*",
+    "https://may.2chan.net/*",
+    "https://animanch.com/*",
+    "https://bbs.animanch.com/*"
+  ],
+  "background": {
+    "service_worker": "background-c.js"
+  },
+  "action": {
+    "default_title": "ビーニードルシステムC"
+  },
+  "content_scripts": [{
+    "matches": [
+      "https://img.2chan.net/*",
+      "https://may.2chan.net/*",
+      "https://animanch.com/*",
+      "https://bbs.animanch.com/*"
+    ],
+    "js": ["content-script-c.js"],
+    "css": ["styles-c.css"]
+  }]
+}

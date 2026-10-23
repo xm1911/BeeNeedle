@@ -1,0 +1,252 @@
+/**
+ * This work is dedicated to the public domain under the CC0 1.0 Universal Public Domain Dedication.
+ * For more information, see the LICENSE file.
+ */
+
+/* 共通設定 */
+body {
+  font-family: sans-serif;
+  padding: 10px; /* パディングは共通 */
+}
+
+/* popup.html 用の設定 */
+.popup-body {
+  width: 100px; /* ポップアップ用: 幅300px */
+}
+
+/* options.html 用の設定 */
+.options-body {
+  width: 600px; /* オプションページ用: 幅を広く設定 */
+}
+
+
+h1, h2, h3 {
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+h1 { font-size: 1.4em; }
+h2 { font-size: 1.2em; border-bottom: 1px solid #eee; padding-bottom: 3px;}
+h3 { font-size: 1.0em; margin-left: 10px; }
+
+
+button {
+  margin: 5px;
+  padding: 8px 12px;
+  background-color: #4CAF50; /* 緑 */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+#status, #statusMessage, #clearMemoryMessage, #count {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+  min-height: 1.2em; /* メッセージ表示領域の高さを確保 */
+}
+
+/* options.html */
+div {
+  margin-bottom: 10px;
+  padding-left: 10px; /* 少しインデント */
+}
+
+/* 説明文のスタイル */
+.description {
+    margin: 2px 0 5px 155px; /* ラベルの幅(150px) + マージン分インデント */
+    padding: 0;
+    font-size: 0.8em; /* 説明文は小さめに */
+    color: #666; /* 灰色にして目立ちすぎないように */
+    line-height: 1.4;
+    max-width: calc(100% - 160px); /* 幅を制限 */
+}
+
+/* チェックボックスやボタン直後の説明文の調整 */
+div > input[type="checkbox"] + .description,
+div > select + .description,
+div > input[type="number"] + .description {
+    margin-left: 10px; /* インデントを減らして、入力欄のすぐ右に配置 */
+    display: inline-block;
+    max-width: 450px; /* 幅を調整 */
+}
+
+/* テキストエリア直後の説明文は、インデントを調整 */
+textarea + .description {
+    margin-left: 10px;
+    display: block;
+    max-width: 100%;
+}
+
+/* ログクリアボタン直後の説明文の調整 */
+#clearMemoryButton + .description {
+    margin-left: 0;
+    display: block;
+    margin-top: 5px;
+}
+
+
+label {
+  display: inline-block;
+  width: 150px; /* ラベルの幅を調整 */
+  margin-right: 5px;
+  vertical-align: middle; /* チェックボックスと揃える */
+  font-size: 0.9em;
+}
+
+input[type="number"] {
+  width: 50px; /* 少し狭く */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+input[type="checkbox"] {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+textarea {
+    width: calc(100% - 165px); /* ラベル幅を考慮 */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    vertical-align: top; /* textarea を上に揃える */
+    min-height: 40px; /* 最低限の高さを確保 */
+    font-size: 0.9em;
+}
+
+/* チェックボックスだけの行の調整 */
+h3 + div > label:first-child { /* h3直後のdiv内の最初のlabel */
+    width: auto; /* 幅自動 */
+}
+h3 + div > label > input[type="checkbox"] {
+    margin-left: 0; /* 左マージン削除 */
+}
+
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* popup.html のリンク */
+a {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* content.js (ツールチップ) - 削除または維持（今回は維持しつつ、options.html用のツールチップは削除） */
+.spam-tooltip {
+  position: absolute; 
+  z-index: 10000; 
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  max-width: 400px; 
+  word-wrap: break-word; 
+  white-space: normal; 
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  pointer-events: none; 
+}
+
+.spam-tooltip hr {
+    border: 0;
+    height: 1px;
+    background-color: #555; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* style.css に追加・変更するスタイル */
+
+/* details/summary のスタイル調整 */
+details.setting-group {
+    margin-bottom: 10px;
+    border: 1px solid #eee; /* グループの境界線を明確に */
+    border-radius: 4px;
+    padding: 0;
+}
+
+details.setting-group > summary {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #f9f9f9; /* 背景色で目立たせる */
+    border-bottom: 1px solid #eee;
+    list-style: none; /* デフォルトのマーカーを非表示にする */
+}
+
+/* summary内のh2のスタイルを調整 */
+details.setting-group > summary h2 {
+    display: inline; /* h2をインライン化 */
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+    border-bottom: none; /* summary内のh2の下線を削除 */
+}
+
+/* summaryのマーカーをカスタム（右側に配置） */
+details.setting-group > summary::before {
+    content: '▶'; /* 閉じた状態のマーカー */
+    margin-right: 10px;
+    font-size: 0.8em;
+    transition: transform 0.2s;
+}
+
+details.setting-group[open] > summary::before {
+    content: '▼'; /* 開いた状態のマーカー */
+}
+
+/* detailsが開いているとき、summaryの下線は不要 */
+details.setting-group[open] > summary {
+    border-bottom: 1px solid #ddd;
+}
+
+/* details内のコンテンツのパディング */
+details.setting-group > div,
+details.setting-group > h3 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* 既存のh3のスタイルを調整 */
+h3 {
+    font-size: 1.0em; 
+    margin-left: 0; /* details内のh3のインデントをリセット */
+    padding-left: 5px;
+    border-left: 3px solid #4CAF50; /* 緑のラインで強調 */
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+/* hrの調整 */
+hr {
+    margin-top: 10px; 
+    margin-bottom: 10px;
+}
+
+/* データ操作セクションの調整 */
+/* 常に表示される「データ操作と保存」のh2を追加 */
+body > h2:last-of-type { 
+    margin-top: 20px;
+    border-bottom: 1px solid #eee;
+}
